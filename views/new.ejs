@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New User</title>
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./styles/new.css">
+</head>
+
+<body>
+  <div class="main" style="margin-left: 50%; transform: translateX(-50%);">
+    <form class="add" action="/new" method="post">
+    <h1>Add a Family Member</h1>
+    <p>What's your name?</p>
+    <input type="text" name="name">
+
+    <p>Pick a color:</p>
+    <div>
+    <input type="radio" name="color" id="red" value="#aa081a" />
+    <label for="red"><span class="red"></span></label>
+
+    <input type="radio" name="color" id="green" value="#21ba45" />
+    <label for="green"><span class="green"></span></label>
+
+    <input type="radio" name="color" id="yellow" value="#fbbd08" />
+    <label for="yellow"><span class="yellow"></span></label>
+
+    <input type="radio" name="color" id="olive" value="#b5cc18" />
+    <label for="olive"><span class="olive"></span></label>
+
+    <input type="radio" name="color" id="orange" value="#f2711c" />
+    <label for="orange"><span class="orange"></span></label>
+
+    <input type="radio" name="color" id="teal" value="#00b5ad" />
+    <label for="teal"><span class="teal"></span></label>
+
+    <input type="radio" name="color" id="blue" value="#2185d0" />
+    <label for="blue"><span class="blue"></span></label>
+
+    <input type="radio" name="color" id="violet" value="#6435c9" />
+    <label for="violet"><span class="violet"></span></label>
+
+    <input type="radio" name="color" id="purple" value="#a333c8" />
+    <label for="purple"><span class="purple"></span></label>
+
+    <input type="radio" name="color" id="pink" value="#e03997" />
+    <label for="pink"><span class="pink"></span></label>
+    <div class="spacer"></div>
+    <button type="submit">Add</button>
+  </form>
+  <% users.forEach(function(user) { %>
+    <form class="users" action="/delete" method="post">
+        <div class="name-list">
+          <%= user.name %>
+          <input type="hidden" name="id" value="<%= user.id %>">
+          <div>
+            <button type="button" class="edit" data-id="<%= user.id %>"> Edit </button>
+            <button type="submit" id="<%= user.id %>"> Delete </button>
+          </div>
+        </div>
+    </form>
+    <form class="edit-form" id="edit_<%= user.id %>" style="display: none;" action="/user/<%= user.id %>" method="post">
+        <input type="text" name="newName" value="<%= user.name %>">
+        <button type="submit">Save</button> 
+        <button type="button" class="cancel" data-id="<%= user.id %>">Cancel</button>
+    </form>
+  <% }); %>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.edit').click(function() {
+      var id = $(this).data('id');
+      $('#name_' + id).hide();
+      $('#edit_' + id).show();
+    });
+    $('.cancel').click(function() {
+      var id = $(this).data('id');
+      $('#edit_' + id).hide();
+      $('#name_' + id).show();
+    });
+  });
+</script>
+</body>
+
+</html>
