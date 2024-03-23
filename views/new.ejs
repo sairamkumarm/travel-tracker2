@@ -15,7 +15,7 @@
     <form class="add" action="/new" method="post">
     <h1>Add a Family Member</h1>
     <p>What's your name?</p>
-    <input type="text" name="name">
+    <input type="text" name="name" required>
 
     <p>Pick a color:</p>
     <div>
@@ -57,8 +57,10 @@
           <%= user.name %>
           <input type="hidden" name="id" value="<%= user.id %>">
           <div>
-            <button type="button" class="edit" data-id="<%= user.id %>"> Edit </button>
-            <button type="submit" id="<%= user.id %>"> Delete </button>
+            <% if(user.id !== 0) { %>
+              <button type="button" class="edit" data-id="<%= user.id %>"> Edit </button>
+              <button type="submit" id="<%= user.id %>"> Delete </button>
+            <% } %>
           </div>
         </div>
     </form>
