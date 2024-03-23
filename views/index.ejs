@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  <h1 style="color: white;">Travel Tracker</h1>
   <form class="tab-view tab-view-height-auto" action="/user" method="post">
     <% users.forEach(function(user) { %>
       <input type="submit" name="user" value="<%= user.id %>" id="<%= user.id %>">

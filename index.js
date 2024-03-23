@@ -20,9 +20,13 @@ async function getUsers() {
 	return result.rows;
 }
 
-async function checkVisisted(user) {
+async function checkVisited(user) {
 	const result = await db.query("SELECT country_code FROM visited_countries WHERE user_id = $1;", [user]);
 	const color_res = await db.query("SELECT color FROM users WHERE id = $1", [user]);
+	if (!color_res.rows || color_res.rows.length === 0) {
+		throw Error(`No user found with id ${user}`);
+	}
+
 	const color = color_res.rows[0].color;
 	let countries = [];
 	result.rows.forEach((country) => {
@@ -31,7 +35,7 @@ async function checkVisisted(user) {
 	return { countries: countries, color: color };
 }
 app.get("/", async (req, res) => {
-	const response = await checkVisisted(currentUserId);
+	const response = await checkVisited(currentUserId);
 	const users = await getUsers();
 	res.render("index.ejs", {
 		countries: response.countries,
@@ -113,6 +117,10 @@ app.post("/delete", async (req, res) => {
 	const userId = req.body.id;
 	try {
 		await db.query("DELETE FROM users WHERE id = $1;", [userId]);
+		const users = await db.query("SELECT id FROM users ORDER BY id ASC LIMIT 1;");
+		const firstUserId = users.rows[0].id;
+		const response = await checkVisited(firstUserId);
+		currentUserId = firstUserId;
 		res.redirect("/");
 	} catch (err) {
 		console.log(err);
